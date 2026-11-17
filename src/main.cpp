@@ -6,19 +6,14 @@
  */
 
 #include <Arduino.h>
-#include "TinyMqttServer.h"
 #include <vector>
 #include <string>
 #include <esp_log.h>
+#include "config.h"
+#include "TinyMqttServer.h"
 
-/// MQTT broker port configuration
-const uint16_t PORT = 1883;
-/// WiFi credentials
-const char *ssid = "DIGIFIBRA-AChU";
-const char *password = "N7s9dbtH`.*T";
-
-/// MQTT broker instance allowing up to 100 concurrent clients
-MqttBroker broker(PORT, 100);
+/// MQTT broker instance
+MqttBroker broker(PORT, MAX_CLIENTS);
 
 /**
  * @brief Converts a WiFi status code into a human-readable string.

@@ -6,7 +6,7 @@
 [![Gpl 3.0](https://img.shields.io/github/license/hsaturn/TinyMqtt)](https://www.gnu.org/licenses/gpl-3.0.fr.html)
 [![Mqtt 3.1.1](https://img.shields.io/badge/Mqtt-%203.1.1-yellow)](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/errata01/os/mqtt-v3.1.1-errata01-os-complete.html#_Toc442180822)
 
-TinyMqtt is a small, fast and capable Mqtt Broker and Client for Esp8266 / Esp32 / Esp WROOM
+esp32-mqtt-broker is a small, fast and capable Mqtt Broker and Client for Esp32. It is highly recommended to use an ESP32-S3 with PSRAM.
 
 ### Statuses of all unit tests of TinyMqtt and its dependencies
 
@@ -45,19 +45,14 @@ TinyMqtt is a small, fast and capable Mqtt Broker and Client for Esp8266 / Esp32
 
 ## Quickstart
 
-* install [TinyMqtt library](https://github.com/hsaturn/TinyMqtt)
-  (you can use the Arduino library manager and search for TinyMqtt)
-* modify <libraries/TinyMqtt/src/my_credentials.h> (wifi setup)
+* install [TinyMqtt library](https://github.com/JosePineiro/esp32-mqtt-broker)
+* modify <src/config.h> (WiFi and broker setup)
 
 ## Examples
 
 | Example             | Description                                |
 | ------------------- | ------------------------------------------ |
-| [simple-broker](https://github.com/hsaturn/TinyMqtt/tree/main/examples/simple-broker/simple-broker.ino)       | Simple Mqtt broker with your ESP           |
-| [tinymqtt-test](https://github.com/hsaturn/TinyMqtt/tree/main/examples/tinymqtt-test/tinymqtt-test.ino)       | Complex console example                    |
-
-- tinymqtt-test : This is a complex sketch with a terminal console
-  that allows to add clients publish, connect etc with interpreted commands.
+| [simple-broker](https://github.com/JosePineiro/esp32-mqtt-broker/tree/main/src/main.cpp)       | Simple Mqtt broker with your ESP 32          |
 
 ## Retained messages
 
@@ -80,10 +75,12 @@ No problem if the master dies, a new master will be choosen soon.
 no need for having tons of clients (also RAM is the problem with many clients)
 * Why not a 'global' TinyMqtt::loop() instead of having to call loop for all broker/clients instances
 * Test what is the real max number of clients for broker. As far as I saw, 1k is needed per client which would make more than 30 clients critical.
-* MqttClient auto reconnection
-* MqttClient user/password
-* I suspect that MqttClient::parent could be removed and replaced with a simple boolean
-  (this'll need to rewrite a few functions)
+* I suspect that MqttClient::parent could be removed and replaced with a simple boolean (this'll need to rewrite a few functions)
 
 ## License
-Gnu GPL 3.0, see [LICENSE](https://github.com/hsaturn/TinyMqtt/blob/main/LICENSE).
+Gnu GPL 3.0, see [LICENSE](https://github.com/JosePineiro/esp32-mqtt-broker/blob/main/LICENSE).
+
+## 🙏 Créditos
+
+- **Autor:** Jose M. Piñeiro
+- Based in [TinyMqtt library](https://github.com/hsaturn/TinyMqtt)
