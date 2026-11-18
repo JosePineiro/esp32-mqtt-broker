@@ -10,6 +10,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <esp_log.h>
 #include "StringIndexer.h"
 
 /**

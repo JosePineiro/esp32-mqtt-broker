@@ -651,9 +651,19 @@ void MqttClient::processMessage(MqttMessage *mesg)
 
     if (mqttBroker_->authUser_[0] != '\0')
     {
-      if (!(mqttFlags_ & MqttClient::FlagUserName) || !mesg->getString(payload, len) ||
-          !mqttBroker_->checkUser(payload, len))
+      const bool hasUserFlag = (mqttFlags_ & MqttClient::FlagUserName) != 0;
+      const bool gotUser = hasUserFlag && mesg->getString(payload, len);
+      const bool userOk = gotUser && mqttBroker_->checkUser(payload, len);
+
+      if (!userOk)
       {
+        if (!hasUserFlag)
+          log_i("[MQTT] AUTH FAIL (user) - No username provided (expected '%s')", mqttBroker_->authUser_);
+        else if (!gotUser)
+          log_i("[MQTT] AUTH FAIL (user) - Malformed username field");
+        else
+          log_i("[MQTT] AUTH FAIL (user) - Provided user: '%.*s' (expected '%s')", static_cast<int>(len), payload, mqttBroker_->authUser_);
+
         ackReturnCode = MqttClient::BadUserOrPassword;
         break;
       }
@@ -662,9 +672,19 @@ void MqttClient::processMessage(MqttMessage *mesg)
 
     if (mqttBroker_->authPassword_[0] != '\0')
     {
-      if (!(mqttFlags_ & MqttClient::FlagPassword) || !mesg->getString(payload, len) ||
-          !mqttBroker_->checkPassword(payload, len))
+      const bool hasPassFlag = (mqttFlags_ & MqttClient::FlagPassword) != 0;
+      const bool gotPass = hasPassFlag && mesg->getString(payload, len);
+      const bool passOk = gotPass && mqttBroker_->checkPassword(payload, len);
+
+      if (!passOk)
       {
+        if (!hasPassFlag)
+          log_i("[MQTT] AUTH FAIL (password) - No password provided");
+        else if (!gotPass)
+          log_i("[MQTT] AUTH FAIL (password) - Malformed password field");
+        else
+          log_i("[MQTT] AUTH FAIL (password) - Wrong password: '%.*s'", static_cast<int>(len), payload);
+
         ackReturnCode = MqttClient::BadUserOrPassword;
         break;
       }

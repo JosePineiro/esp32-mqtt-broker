@@ -58,10 +58,10 @@ void connectToWiFi()
 
 	while (true)
 	{
-		log_d("[WiFi] Connecting to '%s'...", ssid);
+		log_d("[WiFi] Connecting to '%s'...", WIFI_SSID);
 		WiFi.disconnect(true, false);
 		delay(100);
-		WiFi.begin(ssid, password);
+		WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
 		unsigned long startTime = millis();
 		unsigned long lastDot = 0;
@@ -101,7 +101,7 @@ void connectToWiFi()
 			int rssi = 0, enc = -1;
 			for (int i = 0; i < n; i++)
 			{
-				if (WiFi.SSID(i) == String(ssid))
+				if (WiFi.SSID(i) == String(WIFI_SSID))
 				{
 					found = true;
 					rssi = WiFi.RSSI(i);
@@ -111,9 +111,9 @@ void connectToWiFi()
 			}
 
 			if (!found)
-				log_e("[WiFi] '%s' NOT found among %d visible networks (hidden or out of range).", ssid, n);
+				log_e("[WiFi] '%s' NOT found among %d visible networks (hidden or out of range).", WIFI_SSID, n);
 			else
-				log_e("[WiFi] '%s' found (RSSI %d dBm, enc=%d) but association failed (wrong password/WPA3).", ssid, rssi, enc);
+				log_e("[WiFi] '%s' found (RSSI %d dBm, enc=%d) but association failed (wrong password/WPA3).", WIFI_SSID, rssi, enc);
 		}
 		WiFi.scanDelete();
 		log_d("[WiFi] Retrying...");
@@ -182,9 +182,11 @@ void setup()
 	connectToWiFi();
 
 	broker.Start();
-	broker.SetAuthUser("test");
-	broker.SetAuthPassword("1234");
+	broker.SetAuthUser(MQTT_USER);
+	broker.SetAuthPassword(MQTT_PASSWORD);
+	delay(2000);
 	log_i("Broker ready: %s on port %d", WiFi.localIP().toString().c_str(), PORT);
+	log_i("User: %s with Password: %s", MQTT_USER, MQTT_PASSWORD);
 }
 
 /**
